@@ -21,7 +21,7 @@ class FileNameLayer():
 			print("Error FileNameLayer: Invalid Directory!")
 			return -1
 		if childname in inode.directory: return inode.directory[childname]
-		print("Error FileNameLayer: Lookup Failure!")
+		print("Error FileNameLayer: Lookup Failure of")
 		return -1
 
 	#PLEASE DO NOT MODIFY
@@ -162,7 +162,6 @@ class FileNameLayer():
 		inode_number_of_dir_to_move_file_to = self.LOOKUP(new_path,inode_number_cwd)
 		if inode_number_of_dir_to_move_file_to == -1:
 			return error
-		inode_number_of_dir_to_move_file_to = 0
 
 		if new_path != "":
 			new_dir_name = new_path

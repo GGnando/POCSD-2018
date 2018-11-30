@@ -8,6 +8,8 @@ import InodeLayer, config, MemoryInterface, datetime, InodeOps, MemoryInterface
 #HANDLE OF INODE LAYER
 interface = InodeLayer.InodeLayer()
 
+currentInodeNumOffset = -config.MAX_NUM_INODES
+
 class InodeNumberLayer():
 
 	#PLEASE DO NOT MODIFY
@@ -35,7 +37,7 @@ class InodeNumberLayer():
 		MemoryInterface.update_inode_table(array_inode, inode_number)
 
 
-	#PLEASE DO NOT MODIFYprint
+	#PLEASE DO NOT MODIFY
 	#FINDS NEW INODE INODE NUMBER FROM FILESYSTEM
 	def new_inode_number(self, type, parent_inode_number, name):
 		if parent_inode_number != -1:
@@ -48,7 +50,13 @@ class InodeNumberLayer():
 			if len(parent_inode.directory) == max_entries:
 				print("Error InodeNumberLayer: Maximum inodes allowed per directory reached!")
 				return -1
-		for i in range(0, config.MAX_NUM_INODES):
+
+		global currentInodeNumOffset
+		currentInodeNumOffset += config.MAX_NUM_INODES
+		if currentInodeNumOffset >= config.MAX_NUM_INODES * config.TOTAL_NO_OF_SERVERS / 2:
+			currentInodeNumOffset = 0
+
+		for i in range(currentInodeNumOffset, currentInodeNumOffset + config.MAX_NUM_INODES):
 			if self.INODE_NUMBER_TO_INODE(i) == False: #FALSE INDICTES UNOCCUPIED INODE ENTRY HENCE, FREEUMBER
 				inode = interface.new_inode(type)
 				inode.name = name
@@ -129,7 +137,8 @@ class InodeNumberLayer():
 		if inode.type == 1:
 			print("write InodeNumberLayer: Cannot write to directory")
 			return error
-		updated_inode = interface.write(inode,offset, data)
+		server = (inode_number // config.MAX_NUM_INODES) * 2
+		updated_inode = interface.write(inode,offset, data, server)
 		self.update_inode_table(updated_inode, inode_number) #if changed, change in read
 		return updated_inode
 		

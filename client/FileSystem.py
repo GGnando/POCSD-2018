@@ -88,7 +88,7 @@ def test_read_2D():
         my_object.read(files_to_write_to[i], 0, len(data_to_write[i]) + 1)
 
 
-def test_read_and_write():
+def test_read_and_write(arg= ""):
     my_object, files_to_write_to, data_to_write = test_write_2D()
     #my_object.status()
     interface.link("/A/B/AB_file", "/A/lol")
@@ -112,7 +112,8 @@ def test_read_and_write():
     my_object.read("/A", 0)
     my_object.write("/", "asdf",0)
     my_object.read("/fi_ro", 0)
-    my_object.status()
+    if arg == "print":
+        my_object.status()
 
 def test_link_and_unlink():
     my_object, files_to_write_to, data_to_write = test_write_2D()
@@ -194,7 +195,8 @@ def test_link():
  
 if __name__ == '__main__':
     #test_move()
-    test_link()
+    # test_link()
+    test_read_and_write('print')
     '''
     start_time = time.time()
     Initialize_My_FileSystem()

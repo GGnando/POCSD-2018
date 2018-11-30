@@ -29,6 +29,10 @@ def update_inode_table(inode, inode_number):
 
 def status():
     return pickle.dumps(filesystem.status())
+
+def ping():
+    return True
+
 if __name__ == "__main__":
     if len(sys.argv) < 2 or len(sys.argv) > 2:
         print "ERROR: incorrect number of arguments, usage: python server.py server_port#"
@@ -42,6 +46,7 @@ if __name__ == "__main__":
     server.register_function(update_data_block, "update_data_block")
     server.register_function(update_inode_table, "update_inode_table")
     server.register_function(status, "status")
+    server.register_function(ping, "ping")
     state = Memory.Initialize()
     server.serve_forever()
 

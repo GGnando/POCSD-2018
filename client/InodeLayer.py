@@ -36,7 +36,7 @@ class InodeLayer():
 
 
     #IMPLEMENTS WRITE FUNCTIONALITY
-    def write(self, inode, offset, data):
+    def write(self, inode, offset, data, server):
         index = offset / config.BLOCK_SIZE         
         last_blk_index = self.INDEX_TO_BLOCK_NUMBER(inode, index)  #FETCHING COMPLETE BLOCK OF GIVEN OFFSET
         
@@ -58,7 +58,7 @@ class InodeLayer():
             inode.size = total_blocks * config.BLOCK_SIZE  #UPDATING SIZE 
         
         for i in range(0, total_blocks):     #WRITING BLOCKS
-            new_valid_block_number = interface.get_valid_data_block()
+            new_valid_block_number = interface.get_valid_data_block(server)
             inode.blk_numbers[i] = new_valid_block_number
             interface.update_data_block(new_valid_block_number, blocks[i])
 

@@ -18,8 +18,8 @@ class BlockLayer():
 
 
     #ASKS FOR VALID DATA BLOCK NUMBER
-    def get_valid_data_block(self):
-        return MemoryInterface.get_valid_data_block()
+    def get_valid_data_block(self, server):
+        return MemoryInterface.get_valid_data_block(server)
 
 
     #REMOVES THE INVALID BLOCK NUMBER. 
