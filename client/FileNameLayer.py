@@ -21,7 +21,7 @@ class FileNameLayer():
 			print("Error FileNameLayer: Invalid Directory!")
 			return -1
 		if childname in inode.directory: return inode.directory[childname]
-		print("Error FileNameLayer: Lookup Failure of")
+		print("Error FileNameLayer: Lookup Failure")
 		return -1
 
 	#PLEASE DO NOT MODIFY

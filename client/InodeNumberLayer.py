@@ -3,6 +3,7 @@ THIS MODULE ACTS AS A INODE NUMBER LAYER. NOT ONLY IT SHARES DATA WITH INODE LAY
 UPDATES. THE INODE TABLE AND INODE NUMBER IS UPDATED IN THE FILE SYSTEM USING THIS LAYER
 '''
 import InodeLayer, config, MemoryInterface, datetime, InodeOps, MemoryInterface
+import sys, time
 
 
 #HANDLE OF INODE LAYER
@@ -14,8 +15,8 @@ class InodeNumberLayer():
 
 	#PLEASE DO NOT MODIFY
 	#ASKS FOR INODE FROM INODE NUMBER FROM MemoryInterface.(BLOCK LAYER HAS NOTHING TO DO WITH INODES SO SEPERTAE HANDLE)
-	def INODE_NUMBER_TO_INODE(self, inode_number):
-		array_inode = MemoryInterface.inode_number_to_inode(inode_number)
+	def INODE_NUMBER_TO_INODE(self, inode_number, print_servers=False):
+		array_inode = MemoryInterface.inode_number_to_inode(inode_number, print_servers)
 		inode = InodeOps.InodeOperations().convert_array_to_table(array_inode)
 		if inode: inode.time_accessed = datetime.datetime.now()   #TIME OF ACCESS
 		return inode
@@ -31,10 +32,10 @@ class InodeNumberLayer():
 		return interface.read(inode, offset, length)
 		
 	#UPDATES THE INODE TO THE INODE TABLE
-	def update_inode_table(self, table_inode, inode_number):
+	def update_inode_table(self, table_inode, inode_number, print_servers=False):
 		if table_inode: table_inode.time_modified = datetime.datetime.now()  #TIME OF MODIFICATION 
 		array_inode = InodeOps.InodeOperations().convert_table_to_array(table_inode)
-		MemoryInterface.update_inode_table(array_inode, inode_number)
+		MemoryInterface.update_inode_table(array_inode, inode_number, print_servers)
 
 
 	#PLEASE DO NOT MODIFY
@@ -139,7 +140,7 @@ class InodeNumberLayer():
 			return error
 		server = (inode_number // config.MAX_NUM_INODES) * 2
 		updated_inode = interface.write(inode,offset, data, server)
-		self.update_inode_table(updated_inode, inode_number) #if changed, change in read
+		self.update_inode_table(updated_inode, inode_number, print_servers=True) #if changed, change in read
 		return updated_inode
 		
 
@@ -147,7 +148,7 @@ class InodeNumberLayer():
 	def read(self, inode_number, offset, length, parent_inode_number):
 		'''WRITE YOUR CODE HERE'''
 		error = -1
-		inode = self.INODE_NUMBER_TO_INODE(inode_number)
+		inode = self.INODE_NUMBER_TO_INODE(inode_number, print_servers=True)
 		if inode == False:
 			return error
 		if inode.type == 1:

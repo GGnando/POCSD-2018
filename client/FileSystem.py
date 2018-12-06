@@ -1,5 +1,5 @@
 import MemoryInterface, AbsolutePathNameLayer
-import time
+import time, sys
 
 allowed_commands = ["mkdir", "create", "mv", "read", "write", "status", "rm", "exit"]
 
@@ -256,15 +256,10 @@ def client():
 
             elif tokenized_input[0] == allowed_commands[4]: #write
                 del tokenized_input[0]
-                if(len(tokenized_input) not in range(2, 4)):
-                    print("Error: argument mismatch")
-                elif(len(tokenized_input) == 3 and not tokenized_input[2].isdigit()):
+                if(len(tokenized_input) < 2):
                     print("Error: argument mismatch")
                 else:
-                    offset = 0
-                    if(len(tokenized_input) == 3):
-                        offset = int(tokenized_input[2])
-                    interface_client.write(tokenized_input[0], tokenized_input[1], offset)
+                    interface_client.write(tokenized_input[0], user_input.split(' ', 2)[-1], 0)
 
 
             elif tokenized_input[0] == allowed_commands[5]: #status
@@ -287,7 +282,7 @@ def client():
 
             elif tokenized_input[0] == allowed_commands[7]: #exit
                 del tokenized_input[0]
-                if(len(tokenized_input[0] != 0)):
+                if(len(tokenized_input) != 0):
                     print("Error: argument mismatch")
                 else:
                     exit()
